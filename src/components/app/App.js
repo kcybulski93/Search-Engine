@@ -8,7 +8,8 @@ import Footer from '../Footer/Footer';
 
 class App extends Component {
   state = {
-    staff: null
+    staff: null,
+    filteredPersons: null,
   }
 
   componentDidMount() {
@@ -16,13 +17,32 @@ class App extends Component {
       .then(response => response.json())
       .then(result => {
         let staff = [...result.PRACOWNICY]
-        let id = {id: 0}
-        staff = staff.map( (person,index) => ({...person,...id={id:index+1}}) )
+        let id = { id: 0 }
+        staff = staff.map((person, index) => ({ ...person, ...id = { id: index + 1 } }))
         this.setState({
           staff
         })
-        console.log(id);
       })
+  }
+
+  addPerson = (imie, nazwisko, dzial, wynagrodzenieKwota, wynagrodzenieWaluta) => {
+    const person = {
+      imie,
+      nazwisko,
+      dzial,
+      wynagrodzenieKwota,
+      wynagrodzenieWaluta,
+    }
+
+    this.setState(prevState => ({
+      staff: [...prevState.staff, person]
+    }))
+  }
+
+  searchClick = (filteredPersons) => {
+    this.setState(() => ({
+      filteredPersons
+    }))
   }
 
   render() {
@@ -34,13 +54,13 @@ class App extends Component {
           </header>
           <main>
             <section>
-              <AddNewPerson />
+              <AddNewPerson addPerson={this.addPerson} />
             </section>
             <section>
-              <Search />
+              {this.state.staff ? <Search staff={this.state.staff} searchClick={this.searchClick} /> : this.state.staff}
             </section>
             <section>
-              {this.state.staff?<Table staff={this.state.staff} /> : this.state.staff}
+              {this.state.staff ? <Table staff={this.state.staff} filteredPersons={this.state.filteredPersons} /> : this.state.staff}
             </section>
           </main>
           <footer>
