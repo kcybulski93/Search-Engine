@@ -1,0 +1,10 @@
+.Clock {
+    float: left;
+    width: 190px;
+    height: 70px;
+    color: rgb(52, 86, 133);
+  }
+
+.Clock h3 {
+    margin-top: 10px;
+}

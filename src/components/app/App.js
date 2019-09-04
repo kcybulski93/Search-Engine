@@ -7,7 +7,24 @@ import Table from '../Table/Table';
 import Footer from '../Footer/Footer';
 
 class App extends Component {
-  state = {}
+  state = {
+    staff: null
+  }
+
+  componentDidMount() {
+    fetch("data.json")
+      .then(response => response.json())
+      .then(result => {
+        let staff = [...result.PRACOWNICY]
+        let id = {id: 0}
+        staff = staff.map( (person,index) => ({...person,...id={id:index+1}}) )
+        this.setState({
+          staff
+        })
+        console.log(id);
+      })
+  }
+
   render() {
     return (
       <>
@@ -23,7 +40,7 @@ class App extends Component {
               <Search />
             </section>
             <section>
-              <Table />
+              {this.state.staff?<Table staff={this.state.staff} /> : this.state.staff}
             </section>
           </main>
           <footer>
