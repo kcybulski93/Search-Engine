@@ -2,14 +2,12 @@ import React, { Component } from 'react';
 import './App.css';
 import Header from '../Header/Header';
 import AddNewPerson from '../AddNewPerson/AddNewPerson';
-import Search from '../Search/Search';
-import Table from '../Table/Table';
+import SearchAndTable from '../SearchAndTable/SearchAndTable';
 import Footer from '../Footer/Footer';
 
 class App extends Component {
   state = {
     staff: null,
-    filteredPersons: null,
   }
 
   componentDidMount() {
@@ -39,12 +37,6 @@ class App extends Component {
     }))
   }
 
-  searchClick = (filteredPersons) => {
-    this.setState(() => ({
-      filteredPersons
-    }))
-  }
-
   render() {
     return (
       <>
@@ -57,10 +49,7 @@ class App extends Component {
               <AddNewPerson addPerson={this.addPerson} />
             </section>
             <section>
-              {this.state.staff ? <Search staff={this.state.staff} searchClick={this.searchClick} /> : this.state.staff}
-            </section>
-            <section>
-              {this.state.staff ? <Table staff={this.state.staff} filteredPersons={this.state.filteredPersons} /> : this.state.staff}
+              {this.state.staff ? <SearchAndTable staff={this.state.staff} /> : this.state.staff}
             </section>
           </main>
           <footer>
