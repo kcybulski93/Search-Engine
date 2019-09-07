@@ -35,9 +35,7 @@ class Clock extends Component {
       <>
         <div className='Clock'>
           <h3>
-            {hours > 9 ? hours : `0${hours}`} :
-             {minutes > 9 ? minutes : `0${minutes}`} :
-            {seconds > 9 ? seconds : `0${seconds}`}
+            {hours > 9 ? hours : `0${hours}`} : {minutes > 9 ? minutes : `0${minutes}`} : {seconds > 9 ? seconds : `0${seconds}`}
           </h3>
         </div>
       </>
