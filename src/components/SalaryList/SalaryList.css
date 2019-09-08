@@ -1,0 +1,42 @@
+.SalaryList {
+    background-color: #EAEBEF;
+    width: 680px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    -webkit-box-shadow: 0px 0px 3px 1px rgba(204,204,204,1);
+    -moz-box-shadow: 0px 0px 3px 1px rgba(204,204,204,1);
+    box-shadow: 0px 0px 3px 1px rgba(204,204,204,1);
+}
+
+.SalaryList .row
+{
+ 	display: inline-block;
+    width: 678px;
+    margin: 1px;
+    height: 40px;
+    background-color:#E0E3E7;
+    border-radius: 10px;
+}
+
+.SalaryList .department
+{
+    float: left;
+    width: 180px;
+    height: 40px;
+    background-color:#E0E3E7;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.SalaryList .salary
+{
+    float: left;
+    width: 180px;
+    height: 40px;
+    background-color:#E0E3E7;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    
+}

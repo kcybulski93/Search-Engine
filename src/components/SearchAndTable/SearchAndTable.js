@@ -115,7 +115,7 @@ class SearchAndTable extends Component {
         ||
         (person.wynagrodzenieKwota >= this.state.minSalary && this.state.maxSalary === "")
         ||
-        (this.state.minSalary === "" && person.wynagrodzenieKwota < this.state.maxSalary)
+        (this.state.minSalary === "" && person.wynagrodzenieKwota <= this.state.maxSalary)
       ))
       if (filteredBySalary.length > 0) {
         this.setState({
@@ -132,7 +132,6 @@ class SearchAndTable extends Component {
             wynagrodzenieWaluta: "",
             id: "milion500sto900"
           }]
-
         })
     }
     //Fourth case in which we search by person and department
@@ -169,25 +168,29 @@ class SearchAndTable extends Component {
       for (let i = 0; i < checkedDepartments.length; i++) {
         filteredDepartments = [...filteredDepartments.concat(props.filter(person => person.dzial === checkedDepartments[i]))]
       }
+      console.log(filteredByPerson)
+      console.log(filteredByPerson)
       //Checking the same arrays elements (filteredByPersonDepartment)
       let filteredByPersonDepartment = []
-      if (filteredPersons.length > 0 && filteredDepartments.length > 0) {
-        for (let i = 0; i < filteredPersons.length; i++) {
-          filteredByPersonDepartment = [...filteredByPersonDepartment.concat(filteredDepartments.filter(person => person.id === filteredPersons[i].id))]
-        }
+      for (let i = 0; i < filteredPersons.length; i++) {
+        filteredByPersonDepartment = [...filteredByPersonDepartment.concat(filteredDepartments.filter(person => person.id === filteredPersons[i].id))]
+      }
+      if (filteredByPersonDepartment.length > 0) {
+        this.setState({
+          search: filteredByPersonDepartment
+        })
       }
       else
-        filteredByPersonDepartment = [{
-          imie: "Not found",
-          nazwisko: "",
-          dzial: "",
-          wynagrodzenieKwota: "",
-          wynagrodzenieWaluta: "",
-          id: "milion500sto900"
-        }]
-      this.setState({
-        search: filteredByPersonDepartment
-      })
+        this.setState({
+          search: [{
+            imie: "Not found",
+            nazwisko: "",
+            dzial: "",
+            wynagrodzenieKwota: "",
+            wynagrodzenieWaluta: "",
+            id: "milion500sto900"
+          }]
+        })
     }
     //Fifth case in which we search by department and salary
     else if ((this.state.person === "") && (this.state.checkedDepartments.length !== 0) &&
@@ -209,23 +212,25 @@ class SearchAndTable extends Component {
       ))
       //Checking the same arrays elements (filteredByDepartmentSalary)
       let filteredByDepartmentSalary = []
-      if (filteredBySalary.length > 0 && filteredDepartments.length > 0) {
-        for (let i = 0; i < filteredDepartments.length; i++) {
-          filteredByDepartmentSalary = [...filteredByDepartmentSalary.concat(filteredBySalary.filter(person => person.id === filteredDepartments[i].id))]
-        }
+      for (let i = 0; i < filteredDepartments.length; i++) {
+        filteredByDepartmentSalary = [...filteredByDepartmentSalary.concat(filteredBySalary.filter(person => person.id === filteredDepartments[i].id))]
+      }
+      if (filteredByDepartmentSalary.length > 0) {
+        this.setState({
+          search: filteredByDepartmentSalary
+        })
       }
       else
-        filteredByDepartmentSalary = [{
-          imie: "Not found",
-          nazwisko: "",
-          dzial: "",
-          wynagrodzenieKwota: "",
-          wynagrodzenieWaluta: "",
-          id: "milion500sto900"
-        }]
-      this.setState({
-        search: filteredByDepartmentSalary
-      })
+        this.setState({
+          search: [{
+            imie: "Not found",
+            nazwisko: "",
+            dzial: "",
+            wynagrodzenieKwota: "",
+            wynagrodzenieWaluta: "",
+            id: "milion500sto900"
+          }]
+        })
     }
     //Sixth case in which we search by person and salary
     else if ((this.state.person !== "") && (this.state.checkedDepartments.length === 0) &&
@@ -264,23 +269,25 @@ class SearchAndTable extends Component {
       ))
       //Checking the same arrays elements (filteredByPersonSalary)
       let filteredByPersonSalary = []
-      if (filteredPersons.length > 0 && filteredBySalary.length > 0) {
-        for (let i = 0; i < filteredPersons.length; i++) {
-          filteredByPersonSalary = [...filteredByPersonSalary.concat(filteredBySalary.filter(person => person.id === filteredPersons[i].id))]
-        }
+      for (let i = 0; i < filteredPersons.length; i++) {
+        filteredByPersonSalary = [...filteredByPersonSalary.concat(filteredBySalary.filter(person => person.id === filteredPersons[i].id))]
+      }
+      if (filteredByPersonSalary.length > 0) {
+        this.setState({
+          search: filteredByPersonSalary
+        })
       }
       else
-        filteredByPersonSalary = [{
-          imie: "Not found",
-          nazwisko: "",
-          dzial: "",
-          wynagrodzenieKwota: "",
-          wynagrodzenieWaluta: "",
-          id: "milion500sto900"
-        }]
-      this.setState({
-        search: filteredByPersonSalary
-      })
+        this.setState({
+          search: [{
+            imie: "Not found",
+            nazwisko: "",
+            dzial: "",
+            wynagrodzenieKwota: "",
+            wynagrodzenieWaluta: "",
+            id: "milion500sto900"
+          }]
+        })
     }
     //Seventh case in which we search by person, department and salary
     else if ((this.state.person !== "") && (this.state.checkedDepartments.length !== 0) &&
@@ -326,28 +333,29 @@ class SearchAndTable extends Component {
       ))
       //Checking the same arrays elements (filteredByAll)
       let filteredByPersonDepartment = []
-      if (filteredPersons.length > 0 && filteredDepartments.length > 0 && filteredBySalary.length > 0) {
-        for (let i = 0; i < filteredPersons.length; i++) {
-          filteredByPersonDepartment = [...filteredByPersonDepartment.concat(filteredDepartments.filter(person => person.id === filteredPersons[i].id))]
+      for (let i = 0; i < filteredPersons.length; i++) {
+        filteredByPersonDepartment = [...filteredByPersonDepartment.concat(filteredDepartments.filter(person => person.id === filteredPersons[i].id))]
+      }
+      let filteredByAll = []
+      for (let i = 0; i < filteredBySalary.length; i++) {
+        filteredByAll = [...filteredByAll.concat(filteredByPersonDepartment.filter(person => person.id === filteredBySalary[i].id))]
+        if (filteredByAll.length > 0) {
+          this.setState({
+            search: filteredByAll
+          })
         }
-        let filteredByAll = []
-        for (let i = 0; i < filteredBySalary.length; i++) {
-          filteredByAll = [...filteredByAll.concat(filteredByPersonDepartment.filter(person => person.id === filteredBySalary[i].id))]
-        }
-        this.setState({
-          search: filteredByAll
-        })
-      } else
-        this.setState({
-          search: [{
-            imie: "Not found",
-            nazwisko: "",
-            dzial: "",
-            wynagrodzenieKwota: "",
-            wynagrodzenieWaluta: "",
-            id: "milion500sto900"
-          }]
-        })
+        else
+          this.setState({
+            search: [{
+              imie: "Not found",
+              nazwisko: "",
+              dzial: "",
+              wynagrodzenieKwota: "",
+              wynagrodzenieWaluta: "",
+              id: "milion500sto900"
+            }]
+          })
+      }
       //Inputs cleaning
       // let checked = ""
       // console.log(checked)
@@ -378,7 +386,7 @@ class SearchAndTable extends Component {
 
     const departments = this.props.staff.map(department => department.dzial)
 
-    const uniqueDepartments = [...new Set(departments)];
+    const uniqueDepartments = [...new Set(departments)]
 
     const checkboxes = uniqueDepartments.map((checkbox, index) => {
       var check = this.state.checkbox

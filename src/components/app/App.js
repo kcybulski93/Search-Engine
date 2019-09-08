@@ -4,6 +4,7 @@ import Header from '../Header/Header';
 import AddNewPerson from '../AddNewPerson/AddNewPerson';
 import SearchAndTable from '../SearchAndTable/SearchAndTable';
 import Footer from '../Footer/Footer';
+import SalaryList from '../SalaryList/SalaryList';
 
 class App extends Component {
   state = {
@@ -23,17 +24,18 @@ class App extends Component {
       })
   }
 
-  addPerson = (imie, nazwisko, dzial, wynagrodzenieKwota, wynagrodzenieWaluta) => {
+  addPerson = (imie, nazwisko, dzial, wynagrodzenieKwota, wynagrodzenieWaluta,id) => {
     const person = {
       imie,
       nazwisko,
       dzial,
       wynagrodzenieKwota,
       wynagrodzenieWaluta,
+      id
     }
 
     this.setState(prevState => ({
-      staff: [...prevState.staff, person]
+      staff: [...prevState.staff, person],
     }))
   }
 
@@ -46,10 +48,13 @@ class App extends Component {
           </header>
           <main>
             <section>
-              <AddNewPerson addPerson={this.addPerson} />
+              {this.state.staff ?<AddNewPerson addPerson={this.addPerson} staff={this.state.staff}  /> : this.state.staff}
             </section>
             <section>
               {this.state.staff ? <SearchAndTable staff={this.state.staff} /> : this.state.staff}
+            </section>
+            <section>
+              {this.state.staff ? <SalaryList staff={this.state.staff} /> : this.state.staff}
             </section>
           </main>
           <footer>
