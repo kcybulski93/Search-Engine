@@ -8,7 +8,7 @@ class AddNewPerson extends Component {
     dzial: "IT",
     wynagrodzenieKwota: "",
     wynagrodzenieWaluta: "PLN",
-    id: this.props.staff.length
+    id: this.props.staff.length + 1
   }
 
   handleChange = (e) => {
@@ -22,21 +22,20 @@ class AddNewPerson extends Component {
   }
 
   handleAddClick = () => {
-    const { imie, nazwisko, dzial, wynagrodzenieKwota, wynagrodzenieWaluta,id } = this.state;
+    const { imie, nazwisko, dzial, wynagrodzenieKwota, wynagrodzenieWaluta, id } = this.state;
     if (imie !== "" && nazwisko !== "" && wynagrodzenieKwota !== "") {
-      if(wynagrodzenieKwota<0)
-      {
+      if (wynagrodzenieKwota < 0) {
         console.log("Wynagrodzenie nie może być ujemne!")
       }
       else
-      this.props.addPerson(imie, nazwisko, dzial, wynagrodzenieKwota, wynagrodzenieWaluta,id)
+        this.props.addPerson(imie, nazwisko, dzial, wynagrodzenieKwota, wynagrodzenieWaluta, id)
       this.setState(prevState => ({
         imie: "",
         nazwisko: "",
         dzial: "IT",
         wynagrodzenieKwota: "",
         wynagrodzenieWaluta: "PLN",
-        id: prevState.id+1
+        id: prevState.id + 1
       }))
     }
     else console.log("Wypełnij Wszystkie Pola Formularza!")
@@ -61,8 +60,8 @@ class AddNewPerson extends Component {
           <input className="surname" type="text" name="nazwisko" placeholder="Add surname..." value={this.state.nazwisko} onChange={this.handleChange} />
           <select className="department" value={this.state.dzial} name="dzial" onChange={this.handleChange}>
             <option>IT</option>
-            <option>Administracja</option>
-            <option>Handlowiec</option>
+            <option>Administrator</option>
+            <option>Trader</option>
           </select>
           <input className="salary" type="number" min="=1" step="1" name="wynagrodzenieKwota" placeholder="Add salary..." value={this.state.wynagrodzenieKwota} onChange={this.handleChange} />
           <select className="currency" value={this.state.wynagrodzenieWaluta} name="wynagrodzenieWaluta" onChange={this.handleChange}>

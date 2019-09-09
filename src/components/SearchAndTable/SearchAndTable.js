@@ -9,26 +9,38 @@ class SearchAndTable extends Component {
     minSalary: "",
     maxSalary: "",
     checkedDepartments: [],
+    checkedIT: false,
+    checkedAdministrator: false,
+    checkedTrader: false,
     search: [],
+    expanded: false
   }
 
   //Handling events
-  handlePersonText = (e) => {
+
+  handleChange = (e) => {
+    const target = e.target;
+    const value = target.value;
+    const name = target.name;
     this.setState({
-      person: e.target.value
+      [name]: value
     })
   }
 
-  handleMinSalaryText = (e) => {
-    this.setState({
-      minSalary: e.target.value
-    })
-  }
-
-  handleMaxSalaryText = (e) => {
-    this.setState({
-      maxSalary: e.target.value
-    })
+  showCheckboxes = () => {
+    var checkboxes = document.getElementById("checkboxes");
+    var expanded = this.state.expanded
+    if (!expanded) {
+      checkboxes.style.display = "block";
+      this.setState({
+        expanded: true
+      })
+    } else {
+      checkboxes.style.display = "none";
+      this.setState({
+        expanded: false
+      })
+    }
   }
 
   handleCheckbox = (e) => {
@@ -51,10 +63,10 @@ class SearchAndTable extends Component {
   }
 
   handleSearchClick = () => {
-    //First case in which we search only by person
+    //FIRST case in wchich we search only by PERSON
     if ((this.state.person !== "") && (this.state.checkedDepartments.length === 0) &&
       (this.state.minSalary === "") && (this.state.maxSalary === "")) {
-      const concatenationedNameSurname = this.props.staff.map(person => {
+      const concatNameSurname = this.props.staff.map(person => {
         return {
           zmienna: "",
           osoba: person.imie + " " + person.nazwisko,
@@ -64,7 +76,7 @@ class SearchAndTable extends Component {
           id: person.id
         }
       })
-      const filteredByPerson = concatenationedNameSurname.filter(person => {
+      const filteredByPerson = concatNameSurname.filter(person => {
         return person.osoba.toLowerCase().indexOf(this.state.person.toLowerCase()) !== -1
       })
       const filteredPersons = filteredByPerson.map(person => {
@@ -79,11 +91,28 @@ class SearchAndTable extends Component {
       })
       if (filteredPersons.length > 0) {
         this.setState({
-          search: filteredPersons
+          person: "",
+          minSalary: "",
+          maxSalary: "",
+          checkedDepartments: [],
+          checkedIT: false,
+          checkedAdministrator: false,
+          checkedTrader: false,
+          search: filteredPersons,
+          expanded: false,
         })
+        var checkboxes = document.getElementById("checkboxes");
+        checkboxes.style.display = "none";
       }
       else
         this.setState({
+          person: "",
+          minSalary: "",
+          maxSalary: "",
+          checkedDepartments: [],
+          checkedIT: false,
+          checkedAdministrator: false,
+          checkedTrader: false,
           search: [{
             imie: "Not found",
             nazwisko: "",
@@ -91,10 +120,14 @@ class SearchAndTable extends Component {
             wynagrodzenieKwota: "",
             wynagrodzenieWaluta: "",
             id: "milion500sto900"
-          }]
+          }],
+          expanded: false,
         })
+      checkboxes = document.getElementById("checkboxes");
+      checkboxes.style.display = "none";
     }
-    //Second case in which we search only by department
+
+    //SECOND case in wchich we search only by DEPARTMENT
     else if ((this.state.person === "") && (this.state.checkedDepartments.length !== 0) &&
       (this.state.minSalary === "") && (this.state.maxSalary === "")) {
       const checkedDepartments = this.state.checkedDepartments
@@ -107,7 +140,8 @@ class SearchAndTable extends Component {
         search: filteredDepartments
       })
     }
-    //Third case in which we search only by salary
+
+    //THIRD case in wchich we search only by DEPARTMENT
     else if ((this.state.person === "") && (this.state.checkedDepartments.length === 0) &&
       ((this.state.minSalary !== "") || (this.state.maxSalary !== ""))) {
       const filteredBySalary = this.props.staff.filter(person => (
@@ -134,11 +168,13 @@ class SearchAndTable extends Component {
           }]
         })
     }
-    //Fourth case in which we search by person and department
+
+    //FOURTH case in which we search by PERSON and DEPARTMENT
     else if ((this.state.person !== "") && (this.state.checkedDepartments.length !== 0) &&
       ((this.state.minSalary === "") && (this.state.maxSalary === ""))) {
+
       //Filtering by person
-      const concatenationedNameSurname = this.props.staff.map(person => {
+      const concatNameSurname = this.props.staff.map(person => {
         return {
           zmienna: "",
           osoba: person.imie + " " + person.nazwisko,
@@ -148,7 +184,7 @@ class SearchAndTable extends Component {
           id: person.id
         }
       })
-      const filteredByPerson = concatenationedNameSurname.filter(person => {
+      const filteredByPerson = concatNameSurname.filter(person => {
         return person.osoba.toLowerCase().indexOf(this.state.person.toLowerCase()) !== -1
       })
       const filteredPersons = filteredByPerson.map(person => {
@@ -161,6 +197,7 @@ class SearchAndTable extends Component {
           id: person.id
         }
       })
+
       //Filtering by department
       const checkedDepartments = this.state.checkedDepartments
       const props = this.props.staff
@@ -168,8 +205,7 @@ class SearchAndTable extends Component {
       for (let i = 0; i < checkedDepartments.length; i++) {
         filteredDepartments = [...filteredDepartments.concat(props.filter(person => person.dzial === checkedDepartments[i]))]
       }
-      console.log(filteredByPerson)
-      console.log(filteredByPerson)
+
       //Checking the same arrays elements (filteredByPersonDepartment)
       let filteredByPersonDepartment = []
       for (let i = 0; i < filteredPersons.length; i++) {
@@ -192,9 +228,10 @@ class SearchAndTable extends Component {
           }]
         })
     }
-    //Fifth case in which we search by department and salary
+    //FIFTH case in which we search by DEPARTMENT and SALARY
     else if ((this.state.person === "") && (this.state.checkedDepartments.length !== 0) &&
       ((this.state.minSalary !== "") || (this.state.maxSalary !== ""))) {
+
       //Filtering by department
       const checkedDepartments = this.state.checkedDepartments
       const props = this.props.staff
@@ -202,6 +239,7 @@ class SearchAndTable extends Component {
       for (let i = 0; i < checkedDepartments.length; i++) {
         filteredDepartments = [...filteredDepartments.concat(props.filter(person => person.dzial === checkedDepartments[i]))]
       }
+
       //Filtering by salary
       const filteredBySalary = this.props.staff.filter(person => (
         (person.wynagrodzenieKwota >= this.state.minSalary && person.wynagrodzenieKwota <= this.state.maxSalary)
@@ -210,6 +248,7 @@ class SearchAndTable extends Component {
         ||
         (this.state.minSalary === "" && person.wynagrodzenieKwota < this.state.maxSalary)
       ))
+
       //Checking the same arrays elements (filteredByDepartmentSalary)
       let filteredByDepartmentSalary = []
       for (let i = 0; i < filteredDepartments.length; i++) {
@@ -232,11 +271,13 @@ class SearchAndTable extends Component {
           }]
         })
     }
-    //Sixth case in which we search by person and salary
+
+    //SIXTH case in which we search by PERSON and SALARY
     else if ((this.state.person !== "") && (this.state.checkedDepartments.length === 0) &&
       ((this.state.minSalary !== "") || (this.state.maxSalary !== ""))) {
+
       //Filtering by person
-      const concatenationedNameSurname = this.props.staff.map(person => {
+      const concatNameSurname = this.props.staff.map(person => {
         return {
           zmienna: "",
           osoba: person.imie + " " + person.nazwisko,
@@ -246,7 +287,7 @@ class SearchAndTable extends Component {
           id: person.id
         }
       })
-      const filteredByPerson = concatenationedNameSurname.filter(person => {
+      const filteredByPerson = concatNameSurname.filter(person => {
         return person.osoba.toLowerCase().indexOf(this.state.person.toLowerCase()) !== -1
       })
       const filteredPersons = filteredByPerson.map(person => {
@@ -259,6 +300,7 @@ class SearchAndTable extends Component {
           id: person.id
         }
       })
+
       //Filtering by salary
       const filteredBySalary = this.props.staff.filter(person => (
         (person.wynagrodzenieKwota >= this.state.minSalary && person.wynagrodzenieKwota <= this.state.maxSalary)
@@ -267,6 +309,7 @@ class SearchAndTable extends Component {
         ||
         (this.state.minSalary === "" && person.wynagrodzenieKwota < this.state.maxSalary)
       ))
+
       //Checking the same arrays elements (filteredByPersonSalary)
       let filteredByPersonSalary = []
       for (let i = 0; i < filteredPersons.length; i++) {
@@ -289,11 +332,13 @@ class SearchAndTable extends Component {
           }]
         })
     }
-    //Seventh case in which we search by person, department and salary
+
+    //SEVENTH case in which we search by PERSON, DEPARTMENT and SALARY
     else if ((this.state.person !== "") && (this.state.checkedDepartments.length !== 0) &&
       ((this.state.minSalary !== "") || (this.state.maxSalary !== ""))) {
+
       //Filtering by person
-      const concatenationedNameSurname = this.props.staff.map(person => {
+      const concatNameSurname = this.props.staff.map(person => {
         return {
           zmienna: "",
           osoba: person.imie + " " + person.nazwisko,
@@ -303,7 +348,7 @@ class SearchAndTable extends Component {
           id: person.id
         }
       })
-      const filteredByPerson = concatenationedNameSurname.filter(person => {
+      const filteredByPerson = concatNameSurname.filter(person => {
         return person.osoba.toLowerCase().indexOf(this.state.person.toLowerCase()) !== -1
       })
       const filteredPersons = filteredByPerson.map(person => {
@@ -316,6 +361,7 @@ class SearchAndTable extends Component {
           id: person.id
         }
       })
+
       //Filtering by department
       const checkedDepartments = this.state.checkedDepartments
       const props = this.props.staff
@@ -323,6 +369,7 @@ class SearchAndTable extends Component {
       for (let i = 0; i < checkedDepartments.length; i++) {
         filteredDepartments = [...filteredDepartments.concat(props.filter(person => person.dzial === checkedDepartments[i]))]
       }
+
       //Filtering by salary
       const filteredBySalary = this.props.staff.filter(person => (
         (person.wynagrodzenieKwota >= this.state.minSalary && person.wynagrodzenieKwota <= this.state.maxSalary)
@@ -331,6 +378,7 @@ class SearchAndTable extends Component {
         ||
         (this.state.minSalary === "" && person.wynagrodzenieKwota < this.state.maxSalary)
       ))
+
       //Checking the same arrays elements (filteredByAll)
       let filteredByPersonDepartment = []
       for (let i = 0; i < filteredPersons.length; i++) {
@@ -356,25 +404,35 @@ class SearchAndTable extends Component {
             }]
           })
       }
-      //Inputs cleaning
-      // let checked = ""
-      // console.log(checked)
-      // for (let i = 0; i < this.state.checkedDepartments.length; i++) {
-      //   checked = this.state.checkedDepartments.find(check => check === this.state.checkedDepartments[i])
-      //   console.log(checked)
-      //   this.setState({
-      //     [checked]: false
-      //   })
-      // }
-
     }
-    //Eight case in which we search nothing (Search All)
+
+    //EIGHT case in which we SEARCH NOTHING (Search All)
     else if ((this.state.person === "") && (this.state.checkedDepartments.length === 0) &&
       ((this.state.minSalary === "") || (this.state.maxSalary === ""))) {
       this.setState({
         search: this.props.staff
       })
     }
+  }
+
+  handleAllClick = () => {
+    this.setState({
+      person: "",
+      minSalary: "",
+      maxSalary: "",
+      checkedDepartments: [],
+      checkedIT: false,
+      checkedAdministrator: false,
+      checkedTrader: false,
+      search: [],
+      expanded: false
+    })
+    var checkboxes = document.getElementById("checkboxes");
+    checkboxes.style.display = "none";
+    this.setState({
+      expanded: false
+    })
+
   }
 
   render() {
@@ -384,61 +442,57 @@ class SearchAndTable extends Component {
       var search = this.state.search.map(person => <Person key={person.id} person={person} />)
     }
 
-    const departments = this.props.staff.map(department => department.dzial)
-
-    const uniqueDepartments = [...new Set(departments)]
-
-    const checkboxes = uniqueDepartments.map((checkbox, index) => {
-      var check = this.state.checkbox
-      return (
-        <React.Fragment key={index}>
-          <input className="department" type="checkbox" id={index} name={checkbox} value={checkbox} checked={check} onChange={this.handleCheckbox} />
-          <label htmlFor={index}>{checkbox}</label>
-        </React.Fragment>
-      )
-    })
+    //----------------EXPERIMENTING WITH DIFFERENT data.json------------------------------------------------------------------
+    // const departments = this.props.staff.map(department => department.dzial)
+    //   const uniqueDepartments = [...new Set(departments)]
+    //   const checkboxes = uniqueDepartments.map((checkbox, index) => {
+    //     var check = this.state.checkbox
+    //     return (
+    //       <React.Fragment key={index}>
+    //         <input className="department" type="checkbox" id={index} name={checkbox} value={checkbox} onChange={this.handleCheckbox} />
+    //         <label htmlFor={index}>{checkbox}</label>
+    //       </React.Fragment>
+    //     )
+    //   })
+    //-------------------------------------------------------------------------------------------------------------------------
 
     return (
-      this.state.search.length
-        ?
-        <>
-          <div className="Search">
-            <input className="person" type="text" placeholder="Person..." value={this.state.person} onChange={this.handlePersonText} />
-            {checkboxes}
-            <input className="salary" type="text" placeholder="Min. Salary..." value={this.state.minSalary} onChange={this.handleMinSalaryText} />
-            <input className="salary" type="text" placeholder="Max. Salary..." value={this.state.maxSalary} onChange={this.handleMaxSalaryText} />
-            <button className="search" onClick={this.handleSearchClick}>Search</button>
-          </div>
-          <div className="Table">
-            <div className="header">
-              <div className="name">NAME</div>
-              <div className="surname">SURNAME</div>
-              <div className="department">DEPARTMENT</div>
-              <div className="salary">SALARY</div>
+      <>
+        <div className="Search">
+          <input className="person" name="person" type="text" placeholder="Person..." value={this.state.person} onChange={this.handleChange} />
+          <form>
+            <div className="multiselect">
+              <div className="selectBox" onClick={this.showCheckboxes}>
+                <select>
+                  <option>Department...</option>
+                </select>
+                <div className="overSelect"></div>
+              </div>
+              <div id="checkboxes">
+                <label htmlFor="one">
+                  <input type="checkbox" id="one" name="checkedIT" value="IT" checked={this.state.checkedIT} onChange={this.handleCheckbox} />IT</label>
+                <label htmlFor="two">
+                  <input type="checkbox" id="two" name="checkedAdministrator" checked={this.state.checkedAdministrator} value="Administracja" onChange={this.handleCheckbox} />Administrator</label>
+                <label htmlFor="three">
+                  <input type="checkbox" id="three" name="checkedTrader" value="Handlowiec" checked={this.state.checkedTrader} onChange={this.handleCheckbox} />Trader</label>
+              </div>
             </div>
-            {search}
+          </form>
+          <input className="salary" name="minSalary" type="number" placeholder="Min. Salary..." value={this.state.minSalary} onChange={this.handleChange} />
+          <input className="salary" name="maxSalary" type="number" placeholder="Max. Salary..." value={this.state.maxSalary} onChange={this.handleChange} />
+          <button className="search" onClick={this.handleSearchClick}>Search</button>
+          <button className="search" onClick={this.handleAllClick}>All</button>
+        </div>
+        <div className="Table">
+          <div className="header">
+            <div className="name">NAME</div>
+            <div className="surname">SURNAME</div>
+            <div className="department">DEPARTMENT</div>
+            <div className="salary">SALARY</div>
           </div>
-        </>
-        :
-        <>
-          <div className="Search">
-            <input className="person" type="text" placeholder="Person..." value={this.state.person} onChange={this.handlePersonText} />
-            {checkboxes}
-            <input className="salary" type="text" placeholder="Min. Salary..." value={this.state.minSalary} onChange={this.handleMinSalaryText} />
-            <input className="salary" type="text" placeholder="Max. Salary..." value={this.state.maxSalary} onChange={this.handleMaxSalaryText} />
-            <button className="search" onClick={this.handleSearchClick}>Search</button>
-          </div>
-          <div className="Table">
-            <div className="header">
-              <div className="name">NAME</div>
-              <div className="surname">SURNAME</div>
-              <div className="department">DEPARTMENT</div>
-              <div className="salary">SALARY</div>
-            </div>
-            {staff}
-          </div>
-        </>
-
+          {this.state.search.length ? search : staff}
+        </div>
+      </>
     );
   }
 }

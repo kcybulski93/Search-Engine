@@ -4,7 +4,7 @@ import './SalaryList.css';
 class SalaryList extends Component {
 	state = {
 	}
-	//----------------EXPERIMENT------------------------------------------------------------------
+	//----------------EXPERIMENTING WITH DIFFERENT data.json------------------------------------------------------------------
 	// componentDidMount() {
 	// 	const allDepartments = this.props.staff.map(person => person.dzial)
 	// 	const uniqueDepartments = [...new Set(allDepartments)]
@@ -38,34 +38,8 @@ class SalaryList extends Component {
 	// 		}
 	// 	}
 	// }
-	//-------------------------------------------------------------------------------------------------------
+	//------------------------------------------------------------------------------------------------------------------------
 	render() {
-		const allDepartments = this.props.staff.map(person => person.dzial)
-		const uniqueDepartments = [...new Set(allDepartments)]
-		let department = ""
-		let peopleInTheDepartment = []
-		let allCurrenciesInTheDepartment = []
-		let uniqueCurrenciesInTheDepartment = []
-		let currency = ""
-		let peopleEarningInGivenCurrency = []
-		let salariesInTheDepartment = []
-		let totalEarningsInTheDepartment = 0
-
-		for (let i = 0; i < uniqueDepartments.length; i++) {
-			department = uniqueDepartments.find(department => department === uniqueDepartments[i])
-			peopleInTheDepartment = this.props.staff.filter(person => person.dzial === uniqueDepartments[i])
-			allCurrenciesInTheDepartment = peopleInTheDepartment.map(person => person.wynagrodzenieWaluta)
-			uniqueCurrenciesInTheDepartment = [...new Set(allCurrenciesInTheDepartment)]
-			for (let j = 0; j < uniqueCurrenciesInTheDepartment.length; j++) {
-				currency = uniqueCurrenciesInTheDepartment.find(currency => currency === uniqueCurrenciesInTheDepartment[j])
-				peopleEarningInGivenCurrency = peopleInTheDepartment.filter(person => person.wynagrodzenieWaluta === uniqueCurrenciesInTheDepartment[j])
-				salariesInTheDepartment = peopleEarningInGivenCurrency.map(person => person.wynagrodzenieKwota)
-				totalEarningsInTheDepartment = 0
-				for (let k = 0; k < salariesInTheDepartment.length; k++) {
-					totalEarningsInTheDepartment += parseFloat(salariesInTheDepartment[k])
-				}
-			}
-		}
 
 		const row = <React.Fragment>
 			<div className="row">

@@ -15,16 +15,15 @@ class App extends Component {
     fetch("data.json")
       .then(response => response.json())
       .then(result => {
-        let staff = [...result.PRACOWNICY]
-        let id = { id: 0 }
-        staff = staff.map((person, index) => ({ ...person, ...id = { id: index + 1 } }))
+        let staff = [...result.PRACOWNICY,]
+        staff = staff.map((person, index) => ({ ...person, ...{ id: index + 1 } }))
         this.setState({
           staff
         })
       })
   }
 
-  addPerson = (imie, nazwisko, dzial, wynagrodzenieKwota, wynagrodzenieWaluta,id) => {
+  addPerson = (imie, nazwisko, dzial, wynagrodzenieKwota, wynagrodzenieWaluta, id) => {
     const person = {
       imie,
       nazwisko,
@@ -48,7 +47,7 @@ class App extends Component {
           </header>
           <main>
             <section>
-              {this.state.staff ?<AddNewPerson addPerson={this.addPerson} staff={this.state.staff}  /> : this.state.staff}
+              {this.state.staff ? <AddNewPerson addPerson={this.addPerson} staff={this.state.staff} /> : this.state.staff}
             </section>
             <section>
               {this.state.staff ? <SearchAndTable staff={this.state.staff} /> : this.state.staff}
