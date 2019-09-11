@@ -11,6 +11,7 @@
    }
    
 .Table {
+    display: inline-block;
     background-color: #EAEBEF;
     width: 680px;
     margin-left: 20px;

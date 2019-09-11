@@ -16,21 +16,30 @@ class SearchAndTable extends Component {
     expanded: false
   }
 
-  //Handling events
-
   handleChange = (e) => {
     const target = e.target;
-    const value = target.value;
+    const value = target.type === "checkbox" ? target.checked : target.value
     const name = target.name;
     this.setState({
       [name]: value
     })
+    if (target.type === "checkbox") {
+      const department = e.target.value
+      if (this.state.checkedDepartments.indexOf(department) === -1)
+        this.setState(prevState => ({
+          checkedDepartments: [...prevState.checkedDepartments, department]
+        }))
+      else {
+        this.setState(prevState => ({
+          checkedDepartments: prevState.checkedDepartments.filter(dep => dep !== department)
+        }))
+      }
+    }
   }
 
   showCheckboxes = () => {
     var checkboxes = document.getElementById("checkboxes");
-    var expanded = this.state.expanded
-    if (!expanded) {
+    if (!this.state.expanded) {
       checkboxes.style.display = "block";
       this.setState({
         expanded: true
@@ -43,375 +52,207 @@ class SearchAndTable extends Component {
     }
   }
 
-  handleCheckbox = (e) => {
-    const target = e.target
-    const value = target.checked
-    const name = target.name
-    this.setState({
-      [name]: value
+  filteringByPeople() {
+    const concatNameSurname = this.props.staff.map(person => {
+      return {
+        zmienna: "",
+        osoba: person.name + " " + person.surname,
+        department: person.department,
+        salary: person.salary,
+        curreny: person.curreny,
+        id: person.id
+      }
     })
-    const department = e.target.value
-    if (this.state.checkedDepartments.indexOf(department) === -1)
-      this.setState(prevState => ({
-        checkedDepartments: [...prevState.checkedDepartments, department]
-      }))
-    else {
-      this.setState(prevState => ({
-        checkedDepartments: prevState.checkedDepartments.filter(dep => dep !== department)
-      }))
+    const filteredByPerson = concatNameSurname.filter(person => {
+      return person.osoba.toLowerCase().indexOf(this.state.person.toLowerCase()) !== -1
+    })
+    const filteredByPeople = filteredByPerson.map(person => {
+      return {
+        name: person.osoba.substr(0, person.osoba.indexOf(" ")),
+        surname: person.osoba.substr(person.osoba.indexOf(" ") + 1, person.osoba.length),
+        department: person.department,
+        salary: person.salary,
+        curreny: person.curreny,
+        id: person.id
+      }
+    })
+    return filteredByPeople
+  }
+
+  filteringByDepartments() {
+    const checkedDepartments = this.state.checkedDepartments
+    const props = this.props.staff
+    let filteredByDepartments = []
+    for (let i = 0; i < checkedDepartments.length; i++) {
+      filteredByDepartments = [...filteredByDepartments.concat(props.filter(person => person.department === checkedDepartments[i]))]
     }
+    return filteredByDepartments
+  }
+
+  filteringBySalaries() {
+    let filteredBySalaries = []
+    const { minSalary, maxSalary } = this.state
+    if ((minSalary !== "") || (maxSalary !== ""))
+      filteredBySalaries = this.props.staff.filter(person => (
+        (person.salary >= minSalary && person.salary <= maxSalary)
+        ||
+        (person.salary >= minSalary && maxSalary === "")
+        ||
+        (minSalary === "" && person.salary < maxSalary)
+      ))
+    return filteredBySalaries
+  }
+
+  cleaningInput() {
+    this.setState({
+      person: "",
+      minSalary: "",
+      maxSalary: "",
+      checkedDepartments: [],
+      checkedIT: false,
+      checkedAdministrator: false,
+      checkedTrader: false,
+      expanded: false,
+    })
+    var checkboxes = document.getElementById("checkboxes");
+    checkboxes.style.display = "none";
+  }
+
+  displayingNotFound() {
+    this.setState({
+      search: [{
+        name: "Not found",
+        surname: "",
+        department: "",
+        salary: "",
+        curreny: "",
+        id: "milion500sto900"
+      }]
+    })
   }
 
   handleSearchClick = () => {
-    //FIRST case in wchich we search only by PERSON
+
+    //FIRST case in wchich we search only by PEOPLE
     if ((this.state.person !== "") && (this.state.checkedDepartments.length === 0) &&
-      (this.state.minSalary === "") && (this.state.maxSalary === "")) {
-      const concatNameSurname = this.props.staff.map(person => {
-        return {
-          zmienna: "",
-          osoba: person.imie + " " + person.nazwisko,
-          dzial: person.dzial,
-          wynagrodzenieKwota: person.wynagrodzenieKwota,
-          wynagrodzenieWaluta: person.wynagrodzenieWaluta,
-          id: person.id
-        }
-      })
-      const filteredByPerson = concatNameSurname.filter(person => {
-        return person.osoba.toLowerCase().indexOf(this.state.person.toLowerCase()) !== -1
-      })
-      const filteredPersons = filteredByPerson.map(person => {
-        return {
-          imie: person.osoba.substr(0, person.osoba.indexOf(" ")),
-          nazwisko: person.osoba.substr(person.osoba.indexOf(" ") + 1, person.osoba.length),
-          dzial: person.dzial,
-          wynagrodzenieKwota: person.wynagrodzenieKwota,
-          wynagrodzenieWaluta: person.wynagrodzenieWaluta,
-          id: person.id
-        }
-      })
-      if (filteredPersons.length > 0) {
+      ((this.state.minSalary === "") && (this.state.maxSalary === ""))) {
+      const filteredByPeople = this.filteringByPeople()
+      this.cleaningInput()
+      if (filteredByPeople.length !== 0)
         this.setState({
-          person: "",
-          minSalary: "",
-          maxSalary: "",
-          checkedDepartments: [],
-          checkedIT: false,
-          checkedAdministrator: false,
-          checkedTrader: false,
-          search: filteredPersons,
-          expanded: false,
+          search: filteredByPeople
         })
-        var checkboxes = document.getElementById("checkboxes");
-        checkboxes.style.display = "none";
-      }
       else
-        this.setState({
-          person: "",
-          minSalary: "",
-          maxSalary: "",
-          checkedDepartments: [],
-          checkedIT: false,
-          checkedAdministrator: false,
-          checkedTrader: false,
-          search: [{
-            imie: "Not found",
-            nazwisko: "",
-            dzial: "",
-            wynagrodzenieKwota: "",
-            wynagrodzenieWaluta: "",
-            id: "milion500sto900"
-          }],
-          expanded: false,
-        })
-      checkboxes = document.getElementById("checkboxes");
-      checkboxes.style.display = "none";
+        this.displayingNotFound()
     }
 
-    //SECOND case in wchich we search only by DEPARTMENT
+    //SECOND case in wchich we search only by DEPARTMENTS
     else if ((this.state.person === "") && (this.state.checkedDepartments.length !== 0) &&
-      (this.state.minSalary === "") && (this.state.maxSalary === "")) {
-      const checkedDepartments = this.state.checkedDepartments
-      const props = this.props.staff
-      let filteredDepartments = []
-      for (let i = 0; i < checkedDepartments.length; i++) {
-        filteredDepartments = [...filteredDepartments.concat(props.filter(person => person.dzial === checkedDepartments[i]))]
-      }
-      this.setState({
-        search: filteredDepartments
-      })
+      ((this.state.minSalary === "") && (this.state.maxSalary === ""))) {
+      const filteredByDepartments = this.filteringByDepartments()
+      this.cleaningInput()
+      if (filteredByDepartments.length !== 0)
+        this.setState({
+          search: filteredByDepartments
+        })
+      else
+        this.displayingNotFound()
     }
 
-    //THIRD case in wchich we search only by DEPARTMENT
+    //THIRD case in wchich we search only by SALARIES
     else if ((this.state.person === "") && (this.state.checkedDepartments.length === 0) &&
       ((this.state.minSalary !== "") || (this.state.maxSalary !== ""))) {
-      const filteredBySalary = this.props.staff.filter(person => (
-        (person.wynagrodzenieKwota >= this.state.minSalary && person.wynagrodzenieKwota <= this.state.maxSalary)
-        ||
-        (person.wynagrodzenieKwota >= this.state.minSalary && this.state.maxSalary === "")
-        ||
-        (this.state.minSalary === "" && person.wynagrodzenieKwota <= this.state.maxSalary)
-      ))
-      if (filteredBySalary.length > 0) {
+      const filteredBySalaries = this.filteringBySalaries()
+      this.cleaningInput()
+      if (filteredBySalaries.length !== 0)
         this.setState({
-          search: filteredBySalary
+          search: filteredBySalaries
         })
-      }
       else
-        this.setState({
-          search: [{
-            imie: "Not found",
-            nazwisko: "",
-            dzial: "",
-            wynagrodzenieKwota: "",
-            wynagrodzenieWaluta: "",
-            id: "milion500sto900"
-          }]
-        })
+        this.displayingNotFound()
     }
 
-    //FOURTH case in which we search by PERSON and DEPARTMENT
+    //FOURTH case in which we search by PEOPLE and DEPARTMENTS
     else if ((this.state.person !== "") && (this.state.checkedDepartments.length !== 0) &&
       ((this.state.minSalary === "") && (this.state.maxSalary === ""))) {
-
-      //Filtering by person
-      const concatNameSurname = this.props.staff.map(person => {
-        return {
-          zmienna: "",
-          osoba: person.imie + " " + person.nazwisko,
-          dzial: person.dzial,
-          wynagrodzenieKwota: person.wynagrodzenieKwota,
-          wynagrodzenieWaluta: person.wynagrodzenieWaluta,
-          id: person.id
-        }
-      })
-      const filteredByPerson = concatNameSurname.filter(person => {
-        return person.osoba.toLowerCase().indexOf(this.state.person.toLowerCase()) !== -1
-      })
-      const filteredPersons = filteredByPerson.map(person => {
-        return {
-          imie: person.osoba.substr(0, person.osoba.indexOf(" ")),
-          nazwisko: person.osoba.substr(person.osoba.indexOf(" ") + 1, person.osoba.length),
-          dzial: person.dzial,
-          wynagrodzenieKwota: person.wynagrodzenieKwota,
-          wynagrodzenieWaluta: person.wynagrodzenieWaluta,
-          id: person.id
-        }
-      })
-
-      //Filtering by department
-      const checkedDepartments = this.state.checkedDepartments
-      const props = this.props.staff
-      let filteredDepartments = []
-      for (let i = 0; i < checkedDepartments.length; i++) {
-        filteredDepartments = [...filteredDepartments.concat(props.filter(person => person.dzial === checkedDepartments[i]))]
-      }
-
-      //Checking the same arrays elements (filteredByPersonDepartment)
+      const filteredByPeople = this.filteringByPeople()
+      const filteredByDepartments = this.filteringByDepartments()
       let filteredByPersonDepartment = []
-      for (let i = 0; i < filteredPersons.length; i++) {
-        filteredByPersonDepartment = [...filteredByPersonDepartment.concat(filteredDepartments.filter(person => person.id === filteredPersons[i].id))]
+      for (let i = 0; i < filteredByPeople.length; i++) {
+        filteredByPersonDepartment = [...filteredByPersonDepartment.concat(filteredByDepartments.filter(person => person.id === filteredByPeople[i].id))]
       }
-      if (filteredByPersonDepartment.length > 0) {
+      this.cleaningInput()
+      if (filteredByPersonDepartment.length !== 0)
         this.setState({
           search: filteredByPersonDepartment
         })
-      }
       else
-        this.setState({
-          search: [{
-            imie: "Not found",
-            nazwisko: "",
-            dzial: "",
-            wynagrodzenieKwota: "",
-            wynagrodzenieWaluta: "",
-            id: "milion500sto900"
-          }]
-        })
-    }
-    //FIFTH case in which we search by DEPARTMENT and SALARY
-    else if ((this.state.person === "") && (this.state.checkedDepartments.length !== 0) &&
-      ((this.state.minSalary !== "") || (this.state.maxSalary !== ""))) {
-
-      //Filtering by department
-      const checkedDepartments = this.state.checkedDepartments
-      const props = this.props.staff
-      let filteredDepartments = []
-      for (let i = 0; i < checkedDepartments.length; i++) {
-        filteredDepartments = [...filteredDepartments.concat(props.filter(person => person.dzial === checkedDepartments[i]))]
-      }
-
-      //Filtering by salary
-      const filteredBySalary = this.props.staff.filter(person => (
-        (person.wynagrodzenieKwota >= this.state.minSalary && person.wynagrodzenieKwota <= this.state.maxSalary)
-        ||
-        (person.wynagrodzenieKwota >= this.state.minSalary && this.state.maxSalary === "")
-        ||
-        (this.state.minSalary === "" && person.wynagrodzenieKwota < this.state.maxSalary)
-      ))
-
-      //Checking the same arrays elements (filteredByDepartmentSalary)
-      let filteredByDepartmentSalary = []
-      for (let i = 0; i < filteredDepartments.length; i++) {
-        filteredByDepartmentSalary = [...filteredByDepartmentSalary.concat(filteredBySalary.filter(person => person.id === filteredDepartments[i].id))]
-      }
-      if (filteredByDepartmentSalary.length > 0) {
-        this.setState({
-          search: filteredByDepartmentSalary
-        })
-      }
-      else
-        this.setState({
-          search: [{
-            imie: "Not found",
-            nazwisko: "",
-            dzial: "",
-            wynagrodzenieKwota: "",
-            wynagrodzenieWaluta: "",
-            id: "milion500sto900"
-          }]
-        })
+        this.displayingNotFound()
     }
 
-    //SIXTH case in which we search by PERSON and SALARY
+    //FIFTH case in which we search by PEOPLE and SALARIES
     else if ((this.state.person !== "") && (this.state.checkedDepartments.length === 0) &&
       ((this.state.minSalary !== "") || (this.state.maxSalary !== ""))) {
-
-      //Filtering by person
-      const concatNameSurname = this.props.staff.map(person => {
-        return {
-          zmienna: "",
-          osoba: person.imie + " " + person.nazwisko,
-          dzial: person.dzial,
-          wynagrodzenieKwota: person.wynagrodzenieKwota,
-          wynagrodzenieWaluta: person.wynagrodzenieWaluta,
-          id: person.id
-        }
-      })
-      const filteredByPerson = concatNameSurname.filter(person => {
-        return person.osoba.toLowerCase().indexOf(this.state.person.toLowerCase()) !== -1
-      })
-      const filteredPersons = filteredByPerson.map(person => {
-        return {
-          imie: person.osoba.substr(0, person.osoba.indexOf(" ")),
-          nazwisko: person.osoba.substr(person.osoba.indexOf(" ") + 1, person.osoba.length),
-          dzial: person.dzial,
-          wynagrodzenieKwota: person.wynagrodzenieKwota,
-          wynagrodzenieWaluta: person.wynagrodzenieWaluta,
-          id: person.id
-        }
-      })
-
-      //Filtering by salary
-      const filteredBySalary = this.props.staff.filter(person => (
-        (person.wynagrodzenieKwota >= this.state.minSalary && person.wynagrodzenieKwota <= this.state.maxSalary)
-        ||
-        (person.wynagrodzenieKwota >= this.state.minSalary && this.state.maxSalary === "")
-        ||
-        (this.state.minSalary === "" && person.wynagrodzenieKwota < this.state.maxSalary)
-      ))
-
-      //Checking the same arrays elements (filteredByPersonSalary)
+      const filteredByPeople = this.filteringByPeople()
+      const filteredBySalaries = this.filteringBySalaries()
       let filteredByPersonSalary = []
-      for (let i = 0; i < filteredPersons.length; i++) {
-        filteredByPersonSalary = [...filteredByPersonSalary.concat(filteredBySalary.filter(person => person.id === filteredPersons[i].id))]
+      for (let i = 0; i < filteredByPeople.length; i++) {
+        filteredByPersonSalary = [...filteredByPersonSalary.concat(filteredBySalaries.filter(person => person.id === filteredByPeople[i].id))]
       }
-      if (filteredByPersonSalary.length > 0) {
+      this.cleaningInput()
+      if (filteredByPersonSalary.length !== 0)
         this.setState({
           search: filteredByPersonSalary
         })
-      }
       else
-        this.setState({
-          search: [{
-            imie: "Not found",
-            nazwisko: "",
-            dzial: "",
-            wynagrodzenieKwota: "",
-            wynagrodzenieWaluta: "",
-            id: "milion500sto900"
-          }]
-        })
+        this.displayingNotFound()
     }
 
-    //SEVENTH case in which we search by PERSON, DEPARTMENT and SALARY
+    //SIXTH case in which we search by DEPARTMENTS and SALARIES
+    else if ((this.state.person === "") && (this.state.checkedDepartments.length !== 0) &&
+      ((this.state.minSalary !== "") || (this.state.maxSalary !== ""))) {
+      const filteredByDepartments = this.filteringByDepartments()
+      const filteredBySalaries = this.filteringBySalaries()
+      let filteredByDepartmentSalary = []
+      for (let i = 0; i < filteredByDepartments.length; i++) {
+        filteredByDepartmentSalary = [...filteredByDepartmentSalary.concat(filteredBySalaries.filter(person => person.id === filteredByDepartments[i].id))]
+      }
+      this.cleaningInput()
+      if (filteredByDepartmentSalary.length !== 0)
+        this.setState({
+          search: filteredByDepartmentSalary
+        })
+      else
+        this.displayingNotFound()
+    }
+
+    //SEVENTH case in which we search by PEOPLE, DEPARTMENTS and SALARIES
     else if ((this.state.person !== "") && (this.state.checkedDepartments.length !== 0) &&
       ((this.state.minSalary !== "") || (this.state.maxSalary !== ""))) {
-
-      //Filtering by person
-      const concatNameSurname = this.props.staff.map(person => {
-        return {
-          zmienna: "",
-          osoba: person.imie + " " + person.nazwisko,
-          dzial: person.dzial,
-          wynagrodzenieKwota: person.wynagrodzenieKwota,
-          wynagrodzenieWaluta: person.wynagrodzenieWaluta,
-          id: person.id
-        }
-      })
-      const filteredByPerson = concatNameSurname.filter(person => {
-        return person.osoba.toLowerCase().indexOf(this.state.person.toLowerCase()) !== -1
-      })
-      const filteredPersons = filteredByPerson.map(person => {
-        return {
-          imie: person.osoba.substr(0, person.osoba.indexOf(" ")),
-          nazwisko: person.osoba.substr(person.osoba.indexOf(" ") + 1, person.osoba.length),
-          dzial: person.dzial,
-          wynagrodzenieKwota: person.wynagrodzenieKwota,
-          wynagrodzenieWaluta: person.wynagrodzenieWaluta,
-          id: person.id
-        }
-      })
-
-      //Filtering by department
-      const checkedDepartments = this.state.checkedDepartments
-      const props = this.props.staff
-      let filteredDepartments = []
-      for (let i = 0; i < checkedDepartments.length; i++) {
-        filteredDepartments = [...filteredDepartments.concat(props.filter(person => person.dzial === checkedDepartments[i]))]
-      }
-
-      //Filtering by salary
-      const filteredBySalary = this.props.staff.filter(person => (
-        (person.wynagrodzenieKwota >= this.state.minSalary && person.wynagrodzenieKwota <= this.state.maxSalary)
-        ||
-        (person.wynagrodzenieKwota >= this.state.minSalary && this.state.maxSalary === "")
-        ||
-        (this.state.minSalary === "" && person.wynagrodzenieKwota < this.state.maxSalary)
-      ))
-
-      //Checking the same arrays elements (filteredByAll)
+      const filteredByPeople = this.filteringByPeople()
+      const filteredByDepartments = this.filteringByDepartments()
+      const filteredBySalaries = this.filteringBySalaries()
       let filteredByPersonDepartment = []
-      for (let i = 0; i < filteredPersons.length; i++) {
-        filteredByPersonDepartment = [...filteredByPersonDepartment.concat(filteredDepartments.filter(person => person.id === filteredPersons[i].id))]
+      for (let i = 0; i < filteredByPeople.length; i++) {
+        filteredByPersonDepartment = [...filteredByPersonDepartment.concat(filteredByDepartments.filter(person => person.id === filteredByPeople[i].id))]
       }
       let filteredByAll = []
-      for (let i = 0; i < filteredBySalary.length; i++) {
-        filteredByAll = [...filteredByAll.concat(filteredByPersonDepartment.filter(person => person.id === filteredBySalary[i].id))]
-        if (filteredByAll.length > 0) {
-          this.setState({
-            search: filteredByAll
-          })
-        }
-        else
-          this.setState({
-            search: [{
-              imie: "Not found",
-              nazwisko: "",
-              dzial: "",
-              wynagrodzenieKwota: "",
-              wynagrodzenieWaluta: "",
-              id: "milion500sto900"
-            }]
-          })
+      for (let i = 0; i < filteredBySalaries.length; i++) {
+        filteredByAll = [...filteredByAll.concat(filteredByPersonDepartment.filter(person => person.id === filteredBySalaries[i].id))]
       }
+      this.cleaningInput()
+      if (filteredByAll.length !== 0)
+        this.setState({
+          search: filteredByAll
+        })
+      else
+        this.displayingNotFound()
     }
 
     //EIGHT case in which we SEARCH NOTHING (Search All)
     else if ((this.state.person === "") && (this.state.checkedDepartments.length === 0) &&
-      ((this.state.minSalary === "") || (this.state.maxSalary === ""))) {
-      this.setState({
-        search: this.props.staff
-      })
+      ((this.state.minSalary === "") && (this.state.maxSalary === ""))) {
+      console.log("Do nothing!")
     }
   }
 
@@ -432,7 +273,6 @@ class SearchAndTable extends Component {
     this.setState({
       expanded: false
     })
-
   }
 
   render() {
@@ -442,8 +282,8 @@ class SearchAndTable extends Component {
       var search = this.state.search.map(person => <Person key={person.id} person={person} />)
     }
 
-    //----------------EXPERIMENTING WITH DIFFERENT data.json------------------------------------------------------------------
-    // const departments = this.props.staff.map(department => department.dzial)
+    //----------------EXPERIMENTING WITH UNLIMITED DEPARTMENTS AND CURRENCIES------------------------------------------------------------------
+    // const departments = this.props.staff.map(department => department.department)
     //   const uniqueDepartments = [...new Set(departments)]
     //   const checkboxes = uniqueDepartments.map((checkbox, index) => {
     //     var check = this.state.checkbox
@@ -470,11 +310,11 @@ class SearchAndTable extends Component {
               </div>
               <div id="checkboxes">
                 <label htmlFor="one">
-                  <input type="checkbox" id="one" name="checkedIT" value="IT" checked={this.state.checkedIT} onChange={this.handleCheckbox} />IT</label>
+                  <input type="checkbox" id="one" name="checkedIT" value="IT" checked={this.state.checkedIT} onChange={this.handleChange} />IT</label>
                 <label htmlFor="two">
-                  <input type="checkbox" id="two" name="checkedAdministrator" checked={this.state.checkedAdministrator} value="Administracja" onChange={this.handleCheckbox} />Administrator</label>
+                  <input type="checkbox" id="two" name="checkedAdministrator" checked={this.state.checkedAdministrator} value="Administracja" onChange={this.handleChange} />Administration</label>
                 <label htmlFor="three">
-                  <input type="checkbox" id="three" name="checkedTrader" value="Handlowiec" checked={this.state.checkedTrader} onChange={this.handleCheckbox} />Trader</label>
+                  <input type="checkbox" id="three" name="checkedTrader" value="Handlowiec" checked={this.state.checkedTrader} onChange={this.handleChange} />Sales</label>
               </div>
             </div>
           </form>

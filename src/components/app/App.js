@@ -16,26 +16,32 @@ class App extends Component {
       .then(response => response.json())
       .then(result => {
         let staff = [...result.PRACOWNICY,]
-        staff = staff.map((person, index) => ({ ...person, ...{ id: index + 1 } }))
+        staff = staff.map((person, index) =>
+          ({
+            name: person.imie, surname: person.nazwisko, department: person.dzial,
+            salary: parseFloat(person.wynagrodzenieKwota), currency: person.wynagrodzenieWaluta,
+            id: index + 1
+          }))
         this.setState({
           staff
         })
       })
   }
 
-  addPerson = (imie, nazwisko, dzial, wynagrodzenieKwota, wynagrodzenieWaluta, id) => {
+  addPerson = (name, surname, department, salary, currency, id) => {
     const person = {
-      imie,
-      nazwisko,
-      dzial,
-      wynagrodzenieKwota,
-      wynagrodzenieWaluta,
+      name,
+      surname,
+      department,
+      salary: parseFloat(salary),
+      currency,
       id
     }
 
-    this.setState(prevState => ({
-      staff: [...prevState.staff, person],
-    }))
+    this.setState(prevState => (
+      {
+        staff: [...prevState.staff, person],
+      }))
   }
 
   render() {

@@ -3,12 +3,14 @@ import './AddNewPerson.css';
 
 class AddNewPerson extends Component {
   state = {
-    imie: "",
-    nazwisko: "",
-    dzial: "IT",
-    wynagrodzenieKwota: "",
-    wynagrodzenieWaluta: "PLN",
-    id: this.props.staff.length + 1
+    name: "",
+    surname: "",
+    department: "IT",
+    salary: "",
+    currency: "PLN",
+    id: this.props.staff.length + 1,
+    remarkToNegativeAmount: false,
+    remarkToEmptyInputs: false
   }
 
   handleChange = (e) => {
@@ -22,32 +24,41 @@ class AddNewPerson extends Component {
   }
 
   handleAddClick = () => {
-    const { imie, nazwisko, dzial, wynagrodzenieKwota, wynagrodzenieWaluta, id } = this.state;
-    if (imie !== "" && nazwisko !== "" && wynagrodzenieKwota !== "") {
-      if (wynagrodzenieKwota < 0) {
-        console.log("Wynagrodzenie nie może być ujemne!")
+    const { name, surname, department, salary, currency, id } = this.state;
+    if (name !== "" && surname !== "" && salary !== "") {
+      if (salary < 0) {
+        this.setState({
+          remarkToEmptyInputs: false,
+          remarkToNegativeAmount: true
+        })
       }
-      else
-        this.props.addPerson(imie, nazwisko, dzial, wynagrodzenieKwota, wynagrodzenieWaluta, id)
-      this.setState(prevState => ({
-        imie: "",
-        nazwisko: "",
-        dzial: "IT",
-        wynagrodzenieKwota: "",
-        wynagrodzenieWaluta: "PLN",
-        id: prevState.id + 1
-      }))
+      else {
+        this.props.addPerson(name, surname, department, salary, currency, id)
+        this.setState(prevState => ({
+          name: "",
+          surname: "",
+          department: "IT",
+          salary: "",
+          currency: "PLN",
+          id: prevState.id + 1,
+          remarkToNegativeAmount: false,
+          remarkToEmptyInputs: false,
+        }))
+      }
     }
-    else console.log("Wypełnij Wszystkie Pola Formularza!")
+    else
+      this.setState({
+        remarkToEmptyInputs: true
+      })
   }
 
   handleClearClick = () => {
     this.setState({
-      imie: "",
-      nazwisko: "",
-      dzial: "IT",
-      wynagrodzenieKwota: "",
-      wynagrodzenieWaluta: "PLN",
+      name: "",
+      surname: "",
+      department: "IT",
+      salary: "",
+      currency: "PLN",
     })
   }
 
@@ -56,21 +67,25 @@ class AddNewPerson extends Component {
       <>
         <div style={{ clear: "both" }} > </div>
         <div className="AddNewPerson">
-          <input className="name" type="text" name="imie" placeholder="Add name..." value={this.state.imie} onChange={this.handleChange} />
-          <input className="surname" type="text" name="nazwisko" placeholder="Add surname..." value={this.state.nazwisko} onChange={this.handleChange} />
-          <select className="department" value={this.state.dzial} name="dzial" onChange={this.handleChange}>
+          <input className="name" type="text" name="name" placeholder="Add name..." value={this.state.name} onChange={this.handleChange} />
+          <input className="surname" type="text" name="surname" placeholder="Add surname..." value={this.state.surname} onChange={this.handleChange} />
+          <select className="department" value={this.state.department} name="department" onChange={this.handleChange}>
             <option>IT</option>
-            <option>Administrator</option>
-            <option>Trader</option>
+            <option>Administration</option>
+            <option>Sales</option>
           </select>
-          <input className="salary" type="number" min="=1" step="1" name="wynagrodzenieKwota" placeholder="Add salary..." value={this.state.wynagrodzenieKwota} onChange={this.handleChange} />
-          <select className="currency" value={this.state.wynagrodzenieWaluta} name="wynagrodzenieWaluta" onChange={this.handleChange}>
+          <input className="salary" type="number" name="salary" placeholder="Add salary..." value={this.state.salary} onChange={this.handleChange} />
+          <script>
+          </script>
+          <select className="currency" value={this.state.currency} name="currency" onChange={this.handleChange}>
             <option>PLN</option>
             <option>EUR</option>
             <option>USD</option>
           </select>
           <button className="add" onClick={this.handleAddClick}>Add</button>
           <button className="clear" onClick={this.handleClearClick}>Clear</button>
+          {this.state.remarkToEmptyInputs ? <div>dupa</div> : null}
+          {this.state.remarkToNegativeAmount ? <div>dupa2</div> : null}
         </div>
       </>
     );
