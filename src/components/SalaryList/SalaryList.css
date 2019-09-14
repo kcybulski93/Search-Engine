@@ -1,7 +1,8 @@
 .SalaryList {
     display: inline-block;
-    background-color: #EAEBEF;
-    width: 680px;
+    background-color: #276297;
+    color:white;
+    width: 900px;
     margin-left: 20px;
     margin-right: 20px;
     margin-bottom: 20px;
@@ -13,11 +14,22 @@
 
 .SalaryList .row
 {
-    width: 678px;
-    margin: 1px;
-    min-height: 40px;
-    background-color:#E0E3E7;
+    width: 896px;
+    margin: 2px;
+    min-height: 50px;
+    background-color:#1c578c;
     border-radius: 10px;
+    line-height: 50px;
+}
+
+.SalaryList .lastRow
+{
+    width: 896px;
+    margin: 2px;
+    min-height: 50px;
+    background-color:#f08e04;
+    border-radius: 10px;
+    line-height: 50px; 
 }
 
 .SalaryList .department
@@ -25,23 +37,26 @@
     float: left;
     text-align: left;
     margin-left: 10px;
-    width: 359px;
-    min-height: 40px;
-    background-color:#E0E3E7;
+    width: 320px;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
 }
 
 .SalaryList .salary
 {
-    
     float: left;
     text-align: left;
-    margin-left:50px;
-    width: 259px;
-    min-height: 40px;
-    background-color:#E0E3E7;
+    width: 400px;
     border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    
+    border-bottom-left-radius: 10px; 
+}
+
+.SalaryList .department h4{
+    margin:0;
+}
+
+.SalaryList .amount{
+    float: left;
+    margin-left: 20px;
+    font-weight: 600;
 }

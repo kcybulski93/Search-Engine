@@ -10,7 +10,8 @@ class AddNewPerson extends Component {
     currency: "PLN",
     id: this.props.staff.length + 1,
     remarkToNegativeAmount: false,
-    remarkToEmptyInputs: false
+    remarkToEmptyInputs: false,
+    remarkToHighSalary: false,
   }
 
   handleChange = (e) => {
@@ -29,8 +30,16 @@ class AddNewPerson extends Component {
       if (salary < 0) {
         this.setState({
           remarkToEmptyInputs: false,
-          remarkToNegativeAmount: true
+          remarkToNegativeAmount: true,
+          remarkToHighSalary: false,
         })
+      }
+      else if(salary.length>10){
+        this.setState({
+          remarkToEmptyInputs: false,
+          remarkToNegativeAmount: false,
+          remarkToHighSalary: true,
+        }) 
       }
       else {
         this.props.addPerson(name, surname, department, salary, currency, id)
@@ -43,12 +52,15 @@ class AddNewPerson extends Component {
           id: prevState.id + 1,
           remarkToNegativeAmount: false,
           remarkToEmptyInputs: false,
+          remarkToHighSalary: false,
         }))
       }
     }
     else
       this.setState({
-        remarkToEmptyInputs: true
+        remarkToEmptyInputs: true,
+        remarkToNegativeAmount: false,
+        remarkToHighSalary: false,
       })
   }
 
@@ -67,14 +79,14 @@ class AddNewPerson extends Component {
       <>
         <div style={{ clear: "both" }} > </div>
         <div className="AddNewPerson">
-          <input className="name" type="text" name="name" placeholder="Add name..." value={this.state.name} onChange={this.handleChange} />
-          <input className="surname" type="text" name="surname" placeholder="Add surname..." value={this.state.surname} onChange={this.handleChange} />
+          <input className="name" type="text" name="name" maxlength="15" placeholder="Add name..." value={this.state.name} onChange={this.handleChange} />
+          <input className="surname" type="text" name="surname" maxlength="17"  placeholder="Add surname..." value={this.state.surname} onChange={this.handleChange} />
           <select className="department" value={this.state.department} name="department" onChange={this.handleChange}>
             <option>IT</option>
             <option>Administration</option>
             <option>Sales</option>
           </select>
-          <input className="salary" type="number" name="salary" placeholder="Add salary..." value={this.state.salary} onChange={this.handleChange} />
+          <input className="salary" type="number" name="salary" min="0" max="999" placeholder="Add salary..." value={this.state.salary} onChange={this.handleChange} />
           <script>
           </script>
           <select className="currency" value={this.state.currency} name="currency" onChange={this.handleChange}>
@@ -82,11 +94,12 @@ class AddNewPerson extends Component {
             <option>EUR</option>
             <option>USD</option>
           </select>
-          <button className="add" onClick={this.handleAddClick}>Add</button>
+          <button className="add" onClick={this.handleAddClick}>+</button>
           <button className="clear" onClick={this.handleClearClick}>Clear</button>
-          {this.state.remarkToEmptyInputs ? <div>dupa</div> : null}
-          {this.state.remarkToNegativeAmount ? <div>dupa2</div> : null}
-        </div>
+          {this.state.remarkToEmptyInputs ? <div className="error"><h4>Please fill out all fields!</h4></div> : null}
+          {this.state.remarkToNegativeAmount ? <div className="error"><h4>The salary cannot be negative!</h4></div> : null}
+          {this.state.remarkToHighSalary ? <div className="error"><h4>The salary cannot be soo high!</h4></div> : null}
+          </div>
       </>
     );
   }

@@ -1,31 +1,228 @@
 .AddNewPerson {
-    background-color: #EAEBEF;
-    width: 680px;
-    margin-left: 20px;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    -webkit-box-shadow: 0px 0px 3px 1px rgba(204,204,204,1);
-    -moz-box-shadow: 0px 0px 3px 1px rgba(204,204,204,1);
-    box-shadow: 0px 0px 3px 1px rgba(204,204,204,1);
-   }
+  text-align: left;
+  background-color: #276297;
+  width: 900px;
+  min-height: 60px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 0px 3px 1px rgba(204,204,204,1);
+  -moz-box-shadow: 0px 0px 3px 1px rgba(204,204,204,1);
+  box-shadow: 0px 0px 3px 1px rgba(204,204,204,1);
+}
 
-   .name {
-    width: 80px;
-   }
+.AddNewPerson .name {
+  margin-left: 30px;
+  margin-top: 12px;
+  width: 140px;
+  background-color: #fbfbfb;
+  color: #666666;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 7px;
+  box-sizing: border-box;
+  outline: none;
+}
 
-   .surname {
-    width: 80px;
-   }
+.AddNewPerson .name:hover {
+  border: 2px solid #276297;
+  transition: all 0.1s ease-in-out;
+}
 
-   .department {
-    width: 80px;
-   }
+.AddNewPerson .name:focus {
+  -webkit-box-shadow: 0px 0px 7px 2px rgba(204,204,204,1);
+  -moz-box-shadow: 0px 0px 7px 2px rgba(204,204,204,1);
+  box-shadow: 0px 0px 7px 2px rgba(204,204,204,1);
+  border: 2px solid #276297;
+  background-color: rgb(233, 234, 241);
+  color:#0E3C5F;
+}
 
-   .salary {
-    width: 80px;
-   }
+.AddNewPerson .surname {
+  margin-left: 4px;
+  width: 160px;
+  background-color: #fbfbfb;
+  color: #666666;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 7px;
+  box-sizing: border-box;
+  outline: none;
+}
 
-   .currency {
-    width: 80px;
-   }
+.AddNewPerson .surname:hover {
+  border: 2px solid #276297;
+  transition: all 0.1s ease-in-out;
+}
+
+.AddNewPerson .surname:focus {
+  -webkit-box-shadow: 0px 0px 7px 2px rgba(204,204,204,1);
+  -moz-box-shadow: 0px 0px 7px 2px rgba(204,204,204,1);
+  box-shadow: 0px 0px 7px 2px rgba(204,204,204,1);
+  border: 2px solid #276297;
+  background-color: rgb(233, 234, 241);
+  color:#0E3C5F;
+}
+
+.AddNewPerson .department {
+  margin-left: 4px;
+  width: 160px;
+  background-color: #fbfbfb;
+  color: #666666;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 7px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.AddNewPerson .department:hover {
+  border: 2px solid #276297;
+  transition: all 0.1s ease-in-out;
+}
+
+.AddNewPerson .department:focus {
+  -webkit-box-shadow: 0px 0px 7px 2px rgba(204,204,204,1);
+  -moz-box-shadow: 0px 0px 7px 2px rgba(204,204,204,1);
+  box-shadow: 0px 0px 7px 2px rgba(204,204,204,1);
+  border: 2px solid #276297;
+  background-color: rgb(239, 240, 245);
+  color:#0E3C5F;
+}
+
+.AddNewPerson .salary {
+  margin-left: 4px;
+  width: 120px;
+  background-color: #fbfbfb;
+  color: #666666;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 7px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.AddNewPerson .salary:hover {
+  border: 2px solid #276297;
+  transition: all 0.1s ease-in-out;
+}
+
+.AddNewPerson .salary:focus {
+  -webkit-box-shadow: 0px 0px 7px 2px rgba(204,204,204,1);
+  -moz-box-shadow: 0px 0px 7px 2px rgba(204,204,204,1);
+  box-shadow: 0px 0px 7px 2px rgba(204,204,204,1);
+  border: 2px solid #276297;
+  background-color: rgb(239, 240, 245);
+  color:#0E3C5F;
+}
+
+.AddNewPerson .currency {
+  margin-left: 4px;
+  width: 90px;
+  background-color: #fbfbfb;
+  color: #666666;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 7px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.AddNewPerson .currency:hover {
+  border: 2px solid #276297;
+  transition: all 0.1s ease-in-out;
+}
+
+.AddNewPerson .currency:focus {
+  -webkit-box-shadow: 0px 0px 7px 2px rgba(204,204,204,1);
+  -moz-box-shadow: 0px 0px 7px 2px rgba(204,204,204,1);
+  box-shadow: 0px 0px 7px 2px rgba(204,204,204,1);
+  border: 2px solid #276297;
+  background-color: rgb(239, 240, 245);
+  color:#0E3C5F;
+}
+
+.AddNewPerson .add {
+  margin-left: 28px;
+  margin-top:9px;
+  width: 42px;
+  height: 42px;
+  margin-top: 0px;
+  background-color: #f59003;
+  color: white;
+  border: 0.5px solid #ff9500fb;
+  border-radius: 5px;
+  font-size: 18px;
+  box-sizing: border-box;
+  cursor: pointer;
+  letter-spacing: 2px;
+  outline: none;
+  font-weight: 700;
+}
+
+.AddNewPerson .add:hover {
+  background-color: #fa980f;
+    transition: all 0.1s ease-in-out;
+}
+
+.AddNewPerson .add:active {
+  background-color: #fa980f;
+  -webkit-box-shadow:inset 0px 0px 6px 2px #8a8a88;
+  -moz-box-shadow:inset 0px 0px 6px 2px #8a8a88;
+  box-shadow:inset 0px 0px 6px 2px #8a8a88;
+}
+
+.AddNewPerson .clear {
+  width: 80px;
+  height: 42px;
+  margin-left: 4px;
+  background-color: #f59003;
+  border: 0.5px solid #ff9500fb;
+  color: white;
+  border-radius: 5px;
+  font-size: 18px;
+  box-sizing: border-box;
+  cursor: pointer;
+  letter-spacing: 2px;
+  outline: none;
+  font-weight: 600;
+}
+
+.AddNewPerson .clear:hover {
+  background-color: #fa980f;
+  transition: all 0.1s ease-in-out;
+}
+
+.AddNewPerson .clear:active {
+  background-color: #fa980f;
+  -webkit-box-shadow:inset 0px 0px 6px 2px #8a8a88;
+  -moz-box-shadow:inset 0px 0px 6px 2px #8a8a88;
+  box-shadow:inset 0px 0px 6px 2px #8a8a88;
+}
+
+.error {
+  display: inline-block;
+  border-radius: 5px;
+  width: 686px;
+  margin-top:4px;
+  margin-bottom:4px;
+  margin-left:30px;
+  margin-right:30px;
+  height:30px;
+  background-color: rgb(250, 185, 185);
+  font-size: 16px;
+}
+
+.error h4 {
+ margin:0;
+ letter-spacing: 1px;
+ line-height: 30px;
+ margin-left:10px;
+ color: black;
+}

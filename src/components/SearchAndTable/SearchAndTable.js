@@ -278,6 +278,7 @@ class SearchAndTable extends Component {
   render() {
 
     const staff = this.props.staff.map(person => <Person key={person.id} person={person} />)
+
     if (this.state.search != null) {
       var search = this.state.search.map(person => <Person key={person.id} person={person} />)
     }
@@ -318,17 +319,18 @@ class SearchAndTable extends Component {
               </div>
             </div>
           </form>
-          <input className="salary" name="minSalary" type="number" placeholder="Min. Salary..." value={this.state.minSalary} onChange={this.handleChange} />
-          <input className="salary" name="maxSalary" type="number" placeholder="Max. Salary..." value={this.state.maxSalary} onChange={this.handleChange} />
+          <input className="salary" name="minSalary" type="number" placeholder="Min. salary..." value={this.state.minSalary} onChange={this.handleChange} />
+          <input className="salary" name="maxSalary" type="number" placeholder="Max. salary..." value={this.state.maxSalary} onChange={this.handleChange} />
           <button className="search" onClick={this.handleSearchClick}>Search</button>
-          <button className="search" onClick={this.handleAllClick}>All</button>
+          <button className="all" onClick={this.handleAllClick}>All</button>
+          <div style={{ clear: "both" }} > </div>
         </div>
         <div className="Table">
           <div className="header">
-            <div className="name">NAME</div>
-            <div className="surname">SURNAME</div>
-            <div className="department">DEPARTMENT</div>
-            <div className="salary">SALARY</div>
+            <div className="name"><h4>NAME</h4></div>
+            <div className="surname"><h4>SURNAME</h4></div>
+            <div className="department"><h4>DEPARTMENT</h4></div>
+            <div className="salary"><h4>SALARY</h4></div>
           </div>
           {this.state.search.length ? search : staff}
         </div>

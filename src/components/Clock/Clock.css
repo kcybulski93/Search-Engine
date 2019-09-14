@@ -1,10 +1,13 @@
 .Clock {
-    float: left;
-    width: 190px;
-    height: 70px;
-    color: rgb(52, 86, 133);
-  }
+  float: left;
+  width: 190px;
+  height: 70px;
+  color: white
+}
 
 .Clock h3 {
-    margin-top: 10px;
+  font-size: 24px;
+  margin:0;
+  line-height: 60px;
+  margin-left: 30px;
 }

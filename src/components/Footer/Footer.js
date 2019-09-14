@@ -7,7 +7,7 @@ class Footer extends Component {
         return (
             <>
                 <div className="Footer">
-                    Footer
+                    <h4>Made with <i class="icon-heart"> </i><a className="anchor" href="https://www.facebook.com/kamil.cybulski.9">Kamil Cybulski <i class="icon-facebook-rect"></i></a> </h4>
                 </div>
             </>
         );
