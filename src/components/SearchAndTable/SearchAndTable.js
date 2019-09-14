@@ -59,7 +59,7 @@ class SearchAndTable extends Component {
         osoba: person.name + " " + person.surname,
         department: person.department,
         salary: person.salary,
-        curreny: person.curreny,
+        currency: person.currency,
         id: person.id
       }
     })
@@ -72,7 +72,7 @@ class SearchAndTable extends Component {
         surname: person.osoba.substr(person.osoba.indexOf(" ") + 1, person.osoba.length),
         department: person.department,
         salary: person.salary,
-        curreny: person.curreny,
+        currency: person.currency,
         id: person.id
       }
     })
@@ -121,11 +121,11 @@ class SearchAndTable extends Component {
   displayingNotFound() {
     this.setState({
       search: [{
-        name: "Not found",
-        surname: "",
-        department: "",
-        salary: "",
-        curreny: "",
+        name: "Not Found",
+        surname: "-----",
+        department: "-----",
+        salary: "-----",
+        curreny: "-----",
         id: "milion500sto900"
       }]
     })
@@ -321,7 +321,7 @@ class SearchAndTable extends Component {
           </form>
           <input className="salary" name="minSalary" type="number" placeholder="Min. salary..." value={this.state.minSalary} onChange={this.handleChange} />
           <input className="salary" name="maxSalary" type="number" placeholder="Max. salary..." value={this.state.maxSalary} onChange={this.handleChange} />
-          <button className="search" onClick={this.handleSearchClick}>Search</button>
+          <button className="search" onClick={this.handleSearchClick}><i className="icon-search"></i>Search</button>
           <button className="all" onClick={this.handleAllClick}>All</button>
           <div style={{ clear: "both" }} > </div>
         </div>
